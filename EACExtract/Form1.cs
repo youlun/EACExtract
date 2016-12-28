@@ -61,7 +61,7 @@ namespace EACExtract
         private void CallEAC(bool hidden, bool redirectStdout, string arguments, Action<string> exitedCallback, Action<object, DataReceivedEventArgs> stdoutCallback = null)
         {
             ProcessStartInfo psi = new ProcessStartInfo() {
-                FileName = @"C:\Users\youlu\AppData\Local\Programs\bin\eac3to.exe",
+                FileName = @"eac3to.exe",
                 Arguments = arguments,
                 UseShellExecute = false
             };
@@ -103,10 +103,18 @@ namespace EACExtract
                 { "h264/AVC", TrackType.H264_AVC },
                 { "RAW/PCM", TrackType.RAW_PCM },
                 { "DTS Master Audio", TrackType.DTSMA },
+                { "DTS", TrackType.DTS },
                 { "Subtitle (PGS)", TrackType.PGS },
                 { "Chapters", TrackType.Chapter }
             };
-            foreach (var type in types) if (info.Trim().StartsWith(type.Key)) return type.Value;
+
+            string[] rawInfo = info.Trim().Split(',');
+            foreach (var type in types) {
+                if (rawInfo[0] == type.Key) {
+                    return type.Value;
+                }
+            }
+
             return TrackType.Unknown;
         }
 
@@ -166,12 +174,7 @@ namespace EACExtract
                         UseVisualStyleBackColor = true
                     };
 
-                    if (TrackType.RAW_PCM == trackInfo.Type
-                        || TrackType.DTSMA == trackInfo.Type
-                        || TrackType.PGS == trackInfo.Type
-                        || TrackType.Chapter == trackInfo.Type) {
-                        chk.Checked = true;
-                    }
+                    chk.Checked = trackInfo.DefaultSelected;
 
                     this.Invoke(new Action(() => this.Controls.Add(chk)));
                     

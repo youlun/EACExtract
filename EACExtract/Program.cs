@@ -13,6 +13,7 @@ namespace EACExtract
         H264_AVC,
         RAW_PCM,
         DTSMA,
+        DTS,
         PGS,
         Chapter
     }
@@ -21,6 +22,20 @@ namespace EACExtract
     {
         public TrackType Type { get; set; }
         public int Number { get; set; }
+
+        public bool DefaultSelected
+        {
+            get
+            {
+                if (Type == TrackType.RAW_PCM) return true;
+                if (Type == TrackType.DTSMA) return true;
+                if (Type == TrackType.DTS) return true;
+                if (Type == TrackType.PGS) return true;
+                if (Type == TrackType.Chapter) return true;
+                return false;
+            }
+        }
+
         public string Extension
         {
             get
@@ -31,6 +46,8 @@ namespace EACExtract
                     case TrackType.RAW_PCM:
                     case TrackType.DTSMA:
                         return "flac";
+                    case TrackType.DTS:
+                        return "dts";
                     case TrackType.PGS:
                         return "sup";
                     case TrackType.Chapter:
