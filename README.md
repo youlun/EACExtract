@@ -2,7 +2,7 @@
 0. 把 eac3to 放在环境变量(%path%)里
 1. 拖入 .m2ts
 2. 点击按钮，默认抽取以下几种轨道
-3. <pre>RAW/PCM             -> .flac<br>DTS Master Audio    -> .flac<br>DTS                 -> .dts<br>Subtitle (PGS)      -> .sup<br>Chapters            -> .txt</pre>
+3. <pre>RAW/PCM             -> .flac<br>DTS Master Audio    -> .flac<br>DTS                 -> .dts<br>TrueHD/AC3          -> .thd<br>Subtitle (PGS)      -> .sup<br>Chapters            -> .txt<br>MPEGH/ISO/HEVC      -> .hevc<br>FLAC                -> .flac<br>AAC                 -> .m4a</pre>
 4. 等着
 5. 一旦发现不认识的轨道类型，会弹出对话框，请上报
 6. 完成后，抽取的轨道会保存在 .m2ts 相同的文件夹中

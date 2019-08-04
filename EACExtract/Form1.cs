@@ -105,7 +105,10 @@ namespace EACExtract
                 { "DTS Master Audio", TrackType.DTSMA },
                 { "DTS", TrackType.DTS },
                 { "Subtitle (PGS)", TrackType.PGS },
-                { "Chapters", TrackType.Chapter }
+                { "TrueHD/AC3", TrackType.TrueHD_AC3 },
+                { "MPEGH/ISO/HEVC", TrackType.MPEGH_ISO_HEVC },
+                { "FLAC", TrackType.FLAC },
+                { "AAC", TrackType.AAC }
             };
 
             string[] rawInfo = info.Trim().Split(',');
