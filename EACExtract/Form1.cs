@@ -38,8 +38,9 @@ namespace EACExtract
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            if (this.lstFiles.Items.Count == 1) {
-                this.LoadFile(this.lstFiles.Items[0].ToString());
+            Console.WriteLine(Settings.Eac3toFilePath);
+            if (this.lstFiles.Items.Count > 0) {
+                this.button1.PerformClick();
             }
         }
 
@@ -49,8 +50,6 @@ namespace EACExtract
             foreach (string file in files) {
                 this.lstFiles.Items.Add(file);
             }
-
-            this.Form1_Load(sender, e);
         }
 
         private void Form1_DragEnter(object sender, DragEventArgs e)
@@ -61,7 +60,7 @@ namespace EACExtract
         private void CallEAC(bool hidden, bool redirectStdout, string arguments, Action<string> exitedCallback, Action<object, DataReceivedEventArgs> stdoutCallback = null)
         {
             ProcessStartInfo psi = new ProcessStartInfo() {
-                FileName = @"eac3to.exe",
+                FileName = Settings.Eac3toFilePath,
                 Arguments = arguments,
                 UseShellExecute = false
             };
@@ -184,10 +183,9 @@ namespace EACExtract
                     y += 30;
                 }
 
-                //this.txtStatus.Invoke(new Action(() => this.txtStatus.Location = new Point(this.txtStatus.Location.X, y)));
-                this.Invoke(new Action(() => { this.Height = y /*+ txtStatus.Height*/ + 50; }));
+                this.Invoke(new Action(() => { this.Height = y + 50; }));
 
-                if (this.lstFiles.Items.Count > 1) {
+                if (this.lstFiles.Items.Count > 0) {
                     this.Extract(filename);
                 }
             });
@@ -215,9 +213,6 @@ namespace EACExtract
 
                 string trackFilename = string.Format("{0}.{1}.{2}", filenameWithoutExtension, trackInfo.Number, trackInfo.Extension);
                 args.Add(string.Format("{0}:\"{1}\"", trackInfo.Number, trackFilename));
-                //if (TrackType.RAW_PCM == trackInfo.Type) {
-                //     afterExtract.Add(Tuple.Create("flac.exe", string.Format("-8 \"{0}\"", filename)));
-                //}
             }
 
             this.CallEAC(false, false, string.Format("\"{0}\" {1}", filename, string.Join(" ", args)), (stdout) => {
@@ -240,22 +235,18 @@ namespace EACExtract
         {
             this.button1.Enabled = false;
             this.lstFiles.Enabled = false;
-            if (this.lstFiles.Items.Count == 1) {
-                this.Extract(this.lstFiles.Items[0].ToString());
-            } else {
-                Task.Run(() => {
-                    for (int i = 0; i < this.lstFiles.Items.Count; i++) {
-                        this.Event.Reset();
-                        var item = this.lstFiles.Items[i];
-                        string filename = item.ToString();
-                        this.lstFiles.Invoke(new Action(() => this.lstFiles.SelectedIndex = i));
-                        this.LoadFile(filename);
-                        this.Event.WaitOne();
-                    }
-                    this.button1.Invoke(new Action(() => this.button1.Enabled = true));
-                    this.lstFiles.Invoke(new Action(() => this.lstFiles.Enabled = true));
-                });
-            }
+            Task.Run(() => {
+                for (int i = 0; i < this.lstFiles.Items.Count; i++) {
+                    this.Event.Reset();
+                    var item = this.lstFiles.Items[i];
+                    string filename = item.ToString();
+                    this.lstFiles.Invoke(new Action(() => this.lstFiles.SelectedIndex = i));
+                    this.LoadFile(filename);
+                    this.Event.WaitOne();
+                }
+                this.button1.Invoke(new Action(() => this.button1.Enabled = true));
+                this.lstFiles.Invoke(new Action(() => this.lstFiles.Enabled = true));
+            });
         }
     }
 }
