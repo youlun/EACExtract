@@ -19,11 +19,14 @@ namespace EACExtract
         DTSMA,
         DTS,
         TrueHD_AC3,
+        AC3,
+        EAC3,
         PGS,
         Chapter,
         MPEGH_ISO_HEVC,
         FLAC,
-        AAC
+        AAC,
+        SRT,
     }
 
     struct TrackInfo
@@ -42,8 +45,11 @@ namespace EACExtract
                 if (Type == TrackType.Chapter) return true;
                 if (Type == TrackType.TrueHD_AC3) return true;
                 if (Type == TrackType.MPEGH_ISO_HEVC) return true;
+                if (Type == TrackType.AC3) return true;
+                if (Type == TrackType.EAC3) return true;
                 if (Type == TrackType.FLAC) return true;
                 if (Type == TrackType.AAC) return true;
+                if (Type == TrackType.SRT) return true;
                 return false;
             }
         }
@@ -62,6 +68,10 @@ namespace EACExtract
                         return "dts";
                     case TrackType.TrueHD_AC3:
                         return "thd";
+                    case TrackType.AC3:
+                        return "ac3";
+                    case TrackType.EAC3:
+                        return "eac3";
                     case TrackType.PGS:
                         return "sup";
                     case TrackType.Chapter:
@@ -72,6 +82,8 @@ namespace EACExtract
                         return "flac";
                     case TrackType.AAC:
                         return "m4a";
+                    case TrackType.SRT:
+                        return "srt";
                 }
                 return null;
             }

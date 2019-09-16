@@ -16,6 +16,21 @@ namespace EACExtract
 {
     public partial class Form1 : Form
     {
+        private Dictionary<string, TrackType> m_TrackTypes = new Dictionary<string, TrackType>() {
+            { "h264/AVC", TrackType.H264_AVC },
+            { "RAW/PCM", TrackType.RAW_PCM },
+            { "DTS Master Audio", TrackType.DTSMA },
+            { "DTS", TrackType.DTS },
+            { "Subtitle (PGS)", TrackType.PGS },
+            { "TrueHD/AC3", TrackType.TrueHD_AC3 },
+            { "AC3", TrackType.AC3 },
+            { "EAC3", TrackType.EAC3 },
+            { "MPEGH/ISO/HEVC", TrackType.MPEGH_ISO_HEVC },
+            { "FLAC", TrackType.FLAC },
+            { "AAC", TrackType.AAC },
+            { "Subtitle (SRT)", TrackType.SRT },
+        };
+
         private ManualResetEvent Event = new ManualResetEvent(false);
 
         public Form1(List<string> filenames)
@@ -98,20 +113,9 @@ namespace EACExtract
 
         private TrackType StringToTrackType(string info)
         {
-            Dictionary<string, TrackType> types = new Dictionary<string, TrackType>() {
-                { "h264/AVC", TrackType.H264_AVC },
-                { "RAW/PCM", TrackType.RAW_PCM },
-                { "DTS Master Audio", TrackType.DTSMA },
-                { "DTS", TrackType.DTS },
-                { "Subtitle (PGS)", TrackType.PGS },
-                { "TrueHD/AC3", TrackType.TrueHD_AC3 },
-                { "MPEGH/ISO/HEVC", TrackType.MPEGH_ISO_HEVC },
-                { "FLAC", TrackType.FLAC },
-                { "AAC", TrackType.AAC }
-            };
 
             string[] rawInfo = info.Trim().Split(',');
-            foreach (var type in types) {
+            foreach (var type in m_TrackTypes) {
                 if (rawInfo[0] == type.Key) {
                     return type.Value;
                 }
